@@ -29,7 +29,7 @@ DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
 DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
 
 
-echo "\033[1;33m\n:::: CLEAR DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD, "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(BETA zip encryption)\033[0m\033[1;33m, or press ENTER for none of that\n\033[0m"
+echo "\033[1;33m\n:::: CLEAR DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD, "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(Alpha version soon)\033[0m\033[1;33m, or press ENTER for none of that\n\033[0m"
 read UPLOAD_choice
 if [ $UPLOAD_choice = "yy" ]; then
 	zip -e $ENCRYPTEDFILE $TEMP/$FILE
