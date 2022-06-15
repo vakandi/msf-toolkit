@@ -58,7 +58,7 @@ if [ $UPLOAD_choice = "yy" ]; then
 	read password
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;32m:::: Uploading the file into transfer.sh ... \033[0m"
-	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \$ zip -d $FILE\033[0m"
+	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \n$ zip -d $FILE\033[0m"
 	echo "\033[1;34m\n:::: Creating the file link-****.txt in msf folder\n:::: The direct https link to the payload will be in it\033[0m"
 	echo "\033[1;42m::::DONE\033[0m"
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
@@ -99,7 +99,7 @@ fi
 
 echo "\033[1;35m\n:::: Do you want to open the link ? (for QR CODE or Sharing)\nType y for YES, or press Enter to Leave\033[0m"
 read openlink
-if [ $openlink = "y" ]; then
+if [ $openlink = "y" ]
 	termux-open-url $NEWLINK
 else
 	exit
