@@ -39,7 +39,7 @@ echo "\n::::Name of the payload:"
 echo "\033[1;32m $FILE  \033[0m"
 echo "::::Copying the payload in utiles/msf folder... :\n"
 cp ~/msf/temp/$FILE* /storage/emulated/0/utiles/msf/
-ls /storage/emulated/0/utiles/msf/$FILE*
+echo "\033[1;32m$(ls /storage/emulated/0/utiles/msf/$FILE*)\033[0m"
 
 RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)
 LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt
