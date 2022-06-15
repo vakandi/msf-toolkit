@@ -89,6 +89,7 @@ if [ $OLDLINK = $NEWLINK ]; then
 else
 	echo "\033[1;32m\n:::: SUCCESS, PAYLOAD.DD CREATED AND STORED here :"
 	ls /storage/emulated/0/utiles/payload.dd
+	echo "\033[1;32m\n:::: Remember, .dd file are only for Windows attack, not yet MacOS or Android"
 fi
 
 echo "\033[1;35m\n:::: Do you want to open the link ? (for QR CODE or Sharing)\nType y for YES, or press Enter to Leave\033[0m"
