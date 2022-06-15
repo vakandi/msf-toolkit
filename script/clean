@@ -1,6 +1,8 @@
 #!/bin/sh
 rm ~/msf/temp/*.exe
 rm ~/msf/temp/*.zip
+rm ~/msf/temp/*.app
+rm ~/msf/temp/*.apk
 echo "All .exe & .zip removed"
 rm ~/msf/temp/.temp_ip_ngrok-tcp.txt
 echo "temporary ngrok ip text removedd"
