@@ -29,7 +29,7 @@ echo "\033[1;32m____    ____  ___       __  ___      ___      .__   __.  _______
                                                                        
 \033[0m"
 echo "\033[1;34m \nIf have already have a ngrok server running to you want to kill it or not?\033[0m"
-echo "\033[1;34m \nType "y" for yes, "n" for no, then press ENTER\033[0m"
+echo "\033[1;34m \nType \033[1;32m y \033[0m\033[1;34m for yes, \033[1;32m n \033[0m\033[1;34m for no, then press ENTER\033[0m"
 read ngrok_choice
 if [ $ngrok_choice = "y" ]; then
 	~/msf/script/check_ngrok.sh
