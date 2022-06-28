@@ -8,4 +8,5 @@
 ## Options for DuckyScript.dd file with sile DuckScript ready to run on Windows 8/10/11(never tested) 
 ## Options for server upload on transfer.sh with a link available 30days
 ## Encryption options for payloads
+## Updated to work on shitty android smartphone and shitty internet connection
 ## Soon Automatic exclude hex pattern and payload encoding
