@@ -1,6 +1,6 @@
 #!/bin/sh
 SIZE=$(ls -lhF /storage/emulated/0/utiles/termuxbackup/termux-backup.tar.gz | cut -c 28-32)
-DATE=$(stat /storage/emulated/0/utiles/termuxbackup/termux-backup.tar.gz |grep Modify | cut -c -24 | cut -c 8-)
+DATE=$(date -r /storage/self/primary/utiles/termuxbackup/termux-backup.tar.gz | cut -c-16)
 
 BACKUPFILE=/storage/self/primary/utiles/termuxbackup/termux-backup.tar.gz
 echo "Size of the last backup: \n\033[1;34m $SIZE\033[0m\nLast Backup: \033[1;34m $DATE \033[0m\n"

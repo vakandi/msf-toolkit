@@ -1,6 +1,6 @@
 #!/bin/sh
 SIZE=$(du -sh /storage/emulated/0/utiles/termuxbackup/termux-backup.tar.gz)
-DATE=$(stat /storage/emulated/0/utiles/termuxbackup/termux-backup.tar.gz |grep Modify | cut -c -24 | cut -c 8-)
+DATE=$(date -r /storage/self/primary/utiles/termuxbackup/termux-backup.tar.gz | cut -c-16)
 echo "\033[1;31mAre you sure you want to restore termux? It will override everything data in your home folder \n \033[0m"
 read -p "  (y/n)?" CONT
 if [ "$CONT" = "y" ]; then
