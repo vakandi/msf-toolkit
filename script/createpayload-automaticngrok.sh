@@ -48,25 +48,7 @@ if [ $ngrok_choice = "y" ]; then
 	pkill ngrok
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
 	ngrok tcp 5656 > /dev/null &
-fi
-#Waiting for ngrok
-{
-        i=0
-        while [ $i -ne 100 ]
-        do
-                i=$(($i+1))
-                echo "$i"
-                sleep 0.02
-        done
-} | whiptail --backtitle "Vakandi Useful Tools" --title "Starting NGROK server" --gauge "Please wait until ngrok server has been checked" 8 50 0
-
-echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
-if [ $ngrok_choice = "n" ] && [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
-	echo "NGROK RANDOM SERVER TCP IS STARTING..."
-	ngrok tcp 5656 > /dev/null &
-	~/msf/script/check_ngrok.sh
-else
-	continue
+	sleep 6s
 fi
 #Waiting for ngrok
 {
@@ -85,7 +67,7 @@ if [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
 	exit
 fi
 
-sleep 1
+sleep 10s
 echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
 echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
 sleep 1
