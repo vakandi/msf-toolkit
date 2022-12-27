@@ -1,5 +1,6 @@
 #!/bin/sh
 TEMPFILE=/data/data/com.termux/files/home/msf/temp/.temp_ip_ngrok-tcp.txt
+touch $TEMPFILE
 FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
 PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
 IP=$(cat $TEMPFILE | sed 's/\:.*//')
@@ -11,9 +12,10 @@ TEMP="/data/data/com.termux/files/home/msf/temp"
 ENCRYPTEDFILE="/data/data/com.termux/files/home/msf/temp/$FILE-encrypted.zip"
 DDFILE="/data/data/com.termux/files/home/msf/dd/payload_sample.dd"
 DDFILEENCRYPTED="/data/data/com.termux/files/home/msf/dd/payload_sample_encrypted.dd"
-OLDLINK=$(cat ~/msf/temp/old_link.txt)
-NEWLINK=$(cat ~/msf/temp/new_link.txt)
+OLDLINK=$(cat ~/msf/tmp/old_link.txt)
+NEWLINK=$(cat ~/msf/tmp/new_link.txt)
 catngrok=$(cat $TEMPFILE)
+touch $TEMPFILE
 
 echo "\033[1;32m____    ____  ___       __  ___      ___      .__   __.  _______   __  
 \   \  /   / /   \     |  |/  /     /   \     |  \ |  | |       \ |  | 
@@ -48,7 +50,6 @@ if [ $ngrok_choice = "y" ]; then
 	pkill ngrok
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
 	ngrok tcp 5656 > /dev/null &
-	sleep 6s
 fi
 #Waiting for ngrok
 {
@@ -67,7 +68,6 @@ if [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
 	exit
 fi
 
-sleep 10s
 echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
 echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
 sleep 1
