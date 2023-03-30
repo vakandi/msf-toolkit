@@ -156,6 +156,7 @@ if [ $UPLOAD_choice = "yy" ]; then
 	read password_zip
 	echo "\033[1;32m:::: Encrypting using zip ... ::: \033[0m"
 	zip -P $password_zip $TEMP/$FILE -r $ENCRYPTEDFILE
+	echo "\033[1;32m:::: Uploading the zip ... ::: \033[0m"
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;32m:::: Uploading the file into transfer.sh ... \033[0m"
 	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \n$ zip -d $FILE\033[0m"
