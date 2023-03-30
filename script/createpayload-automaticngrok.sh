@@ -202,3 +202,5 @@ if [ $openlink = "y" ]
 	termux-open-url $NEWLINK
 fi
 exit
+
+
