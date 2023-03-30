@@ -51,6 +51,9 @@ if [ $ngrok_choice = "y" ]; then
 	sleep 2s
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
 	ngrok tcp $PORT > /dev/null &
+else
+	echo "This server below is already running, the script will use it : "
+	curl -s localhost:4040/api/tunnels | jq -r .tunnels\[0\].public_url 
 fi
 #Waiting for ngrok
 {
