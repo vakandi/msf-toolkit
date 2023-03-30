@@ -238,7 +238,7 @@ fi
 
 echo "\033[1;35m\n:::: Do you want to open the link ? (for QR CODE or Sharing)\nType y for YES, or press Enter to Leave\n (Only available on Termux)\033[0m"
 read openlink
-if [ $openlink = "y" ]
+if [ "$openlink" = "y" ]
 then
 	termux-open-url $NEWLINK
 fi
