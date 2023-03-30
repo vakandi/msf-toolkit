@@ -52,9 +52,7 @@ echo "\033[1;34m \nIf have already have a ngrok server running to you want to ki
 echo "\033[1;34m \nType \033[1;32m y \033[0m\033[1;34m for yes, \033[1;32m n \033[0m\033[1;34m for no, then press ENTER\033[0m"
 read ngrok_choice
 if [ $ngrok_choice = "y" ]; then
-	~/msf/script/check_ngrok.sh
-	pkill ngrok
-	pkill ngrok
+	curl -s localhost:4040/api/tunnels | jq -r .tunnels\[0\].public_url 
 	pkill ngrok
 	pkill ngrok
 	echo "NGROK RANDOM SERVER TCP IS STARTING..."
