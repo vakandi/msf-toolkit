@@ -1,8 +1,19 @@
 #!/bin/sh
 userr="vakandi"
-echo "Plug the Raspberry Pico now and mount it" 
-echo "Use this command before to setup the right firmware:\n"
-echo "cp adafruit-circuitpython-raspberry_pi_pico-en_US-8.0.4.uf2 /media/$userr/RPI-RP2"
+# Set the device name to match your Raspberry Pi
+device_name="RPI-RP2"
+echo "Plug the Raspberry Pico now and mount it, \n Waiting for the $device_name ...." 
+while true; do
+    # Check if the device is mounted
+    if grep -qs "/dev/${device_name}" /proc/mounts; then
+        echo "Device ${device_name} is mounted!"
+        break
+    fi
+    sleep 1
+done
+
+cp adafruit-circuitpython-raspberry_pi_pico-en_US-8.0.4.uf2 /media/$userr/$device_name
+
 echo "Sleep 20s..."
 sleep 20s
 
