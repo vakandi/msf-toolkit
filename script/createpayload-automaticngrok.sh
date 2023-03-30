@@ -236,9 +236,7 @@ NEWLINK_ZIP=$(cat ~/msf/tmp/new_link_zip.txt)
 if [ "$OLDLINK_ZIP" = "$NEWLINK_ZIP" ]; then
 	echo "\033[1;31m Failed to change the link of unzip.exe in the .dd file \033[0m"
 else
-	echo "\033[1;32m\n:::: SUCCESS, PAYLOAD.DD CREATED AND STORED here :"
-	ls $FOLDER_USEFUL/payload.dd
-	echo "\033[1;32m\n:::: Remember, .dd file are only for Windows attack, not yet MacOS or Android"
+	echo "\033[1;32m\n:::: Unzip.exe link has been added succesfully"
 fi
 
 
