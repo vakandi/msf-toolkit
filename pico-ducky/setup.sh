@@ -1,7 +1,11 @@
 #!/bin/sh
 userr="vakandi"
+echo "Plug the Raspberry Pico now and mount it" 
 echo "Use this command before to setup the right firmware:\n"
-echo "cp adafruit-circuitpython-raspberry_pi_pico-en_US-8.0.4.uf2 /media/$userr/RPI-RP2"                                                                                               0:12
+echo "cp adafruit-circuitpython-raspberry_pi_pico-en_US-8.0.4.uf2 /media/$userr/RPI-RP2"
+echo "Sleep 20s..."
+sleep 20s
+
 echo "If you already did, type yes"
 read choice
 if [ $choice = "yes" ]
