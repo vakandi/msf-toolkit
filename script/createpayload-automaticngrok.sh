@@ -109,6 +109,7 @@ if [ $payload_choice = "w" ]; then
 	FILE="reverse-$name_linux.exe"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Windows EXE format::::\033[0m"
+	DDFILEENCRYPTED="$HOME/msf/dd/payload_sample_encrypted_windows.dd"
 fi
 if [ $payload_choice = "m" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
@@ -116,6 +117,7 @@ if [ $payload_choice = "m" ]; then
 	FILE="reverse-$name_linux.app"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose MacOSX APP format::::\033[0m"
+	DDFILEENCRYPTED="$HOME/msf/dd/payload_sample_encrypted_mac.dd"
 fi
 if [ $payload_choice = "a" ]; then
 	echo "\033[1;34m:::: Creating the payload ::::\033[0m"
@@ -123,6 +125,7 @@ if [ $payload_choice = "a" ]; then
 	FILE="reverse-$name_linux.apk"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Android APK Format::::\033[0m"
+	DDFILEENCRYPTED="$HOME/msf/dd/payload_sample_encrypted_android.dd"
 fi
 
 if [ $payload_choice = "l" ]; then
@@ -131,6 +134,7 @@ if [ $payload_choice = "l" ]; then
 	FILE="reverse-$name_linux.sh"
 	echo "\033[1;34m::::Payload ready ::::\033[0m"
 	echo "\033[1;34m::::You choose Linux APK Format::::\033[0m"
+	DDFILEENCRYPTED="$HOME/msf/dd/payload_sample_encrypted_linux.dd"
 fi
 
 
