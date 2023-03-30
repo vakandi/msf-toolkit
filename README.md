@@ -1,4 +1,5 @@
 [![Top Languages](https://img.shields.io/github/languages/top/vakandi/msf?color=green&label=shell&logo=github)](https://github.com/vakandi/vakandi)
+### The feature for ducky script is only ready for Windows 10, not working on Linux Macos IOS or Android
 # msf framework useful tool
 ## Requirements:
 ### ngrok (free version) installed 
