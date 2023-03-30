@@ -36,8 +36,8 @@ sleep 5s
 while true; do
 	folder_path2="/media/$userr/CIRCUITPY"
 
-	if [ -d "${folder_path}" ]; then
-	    file_count=$(ls -1 "${folder_path}" | wc -l)
+	if [ -d "${folder_path2}" ]; then
+	    file_count=$(ls -1 "${folder_path2}" | wc -l)
 	
 	    if [ "${file_count}" -gt 1 ]; then
 	        echo "$device_name now renamed CircuitPy Found! Starting Preparation...."
