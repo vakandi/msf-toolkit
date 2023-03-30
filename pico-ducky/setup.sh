@@ -13,11 +13,11 @@ then
 	
 	cp -r asyncio /media/$userr/CIRCUITPY/lib
 	cp -r adafruit_wsgi /media/$userr/CIRCUITPY/lib
-	cp -r boot.py /media/$userr/CIRCUITPY/lib
-	cp -r duckyinpython.py /media/$userr/CIRCUITPY/lib
-	cp -r code.py /media/$userr/CIRCUITPY/lib
-	cp -r webapp.py /media/$userr/CIRCUITPY/lib
-	cp -r wsgiserver.py /media/$userr/CIRCUITPY/lib
+	cp -r boot.py /media/$userr/CIRCUITPY/
+	cp -r duckyinpython.py /media/$userr/CIRCUITPY/
+	cp -r code.py /media/$userr/CIRCUITPY/
+	cp -r webapp.py /media/$userr/CIRCUITPY/
+	cp -r wsgiserver.py /media/$userr/CIRCUITPY/
 else
 	echo "exiting.."
 	exit
