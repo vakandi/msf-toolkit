@@ -89,6 +89,13 @@ FILE=reverse-$name_linux
 sleep 1
 echo "\033[1;32m \nPayload Options:\033[0m"
 sleep 1
+link_clean="$(echo $ngrok_link| cut -c7-| sed 's/\:.*//')"
+if test -z "$link_clean" 
+then
+	echo "\033[1;33m[Error] Failed to start ngrok server\033[0m"
+else
+	continue
+fi
 #echo "LHOST PAYLOAD: \033[1;34m$IP\033[0m \nLPORT PAYLOAD: \033[1;34m$PORT\033[0m"
 echo "LHOST PAYLOAD: \033[1;34m$(echo $ngrok_link| cut -c7-| sed 's/\:.*//')\033[0m \nLPORT PAYLOAD: \033[1;34m$PORT\033[0m"
 sleep 1
