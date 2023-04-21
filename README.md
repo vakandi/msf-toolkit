@@ -19,7 +19,7 @@ This is a shell script that sets up a reverse shell using Ngrok.
 2. Run the script.
 3. When prompted, type `y` if you want to kill any existing Ngrok servers or `n` if you don't.
 4. Wait for the script to start Ngrok, if it's not already running.
-5. The script will create a reverse shell and save it to `~/msf/dd/payload_sample_e.dd`. 
+5. The script will create a reverse shell and save it to `~/msf/tmp/`. 
 6. If a previous Ngrok URL was found, it will be saved to `~/msf/tmp/old_link.txt` and the new URL will be saved to `~/msf/tmp/new_link.txt`.
 
 ## How it works
