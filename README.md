@@ -27,13 +27,12 @@ This is a shell script that sets up a reverse shell using Ngrok.
 1. The script reads the Ngrok URL and IP address from a temporary file located at `$HOME/msf/tmp/.temp_ip_ngrok-tcp.txt`.
 2. It sets the port to `5656` and generates a random 5-character string for the archive name.
 3. It saves the archive to `$HOME/msf/tmp/reverse-$RANDOMLETTER.zip`.
-4. It saves the decrypted archive to `$HOME/msf/dd/payload_sample_e.dd`.
-5. It prompts the user to kill any existing Ngrok servers, and starts a new one if needed.
-6. It waits for Ngrok to start and stabilize.
-7. It creates a reverse shell using Metasploit and saves it to `$HOME/msf/dd/payload_sample.dd`.
-8. It encrypts the reverse shell and saves it to `$HOME/msf/dd/payload_sample_e.dd`.
-9. If a previous Ngrok URL was found, it will be saved to `~/msf/tmp/old_link.txt` and the new URL will be saved to `~/msf/tmp/new_link.txt`.
-10. The script displays the Ngrok URL for the reverse shell.
+4. It prompts the user to kill any existing Ngrok servers, and starts a new one if needed.
+5. It waits for Ngrok to start and stabilize.
+6. It creates a reverse shell using Metasploit and saves it to `$HOME/msf/dd/payload_sample.dd`.
+7. It encrypts the reverse shell and saves it to `$HOME/msf/dd/payload_sample_e.dd`.
+8. If a previous Ngrok URL was found, it will be saved to `~/msf/tmp/old_link.txt` and the new URL will be saved to `~/msf/tmp/new_link.txt`.
+9. The script displays the Ngrok URL for the reverse shell.
 
 ## Requirements
 
