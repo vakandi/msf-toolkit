@@ -1,6 +1,11 @@
 #!/bin/sh
 userr="vakandi"
 folder_rasp="/media/$userr/CIRCUITPY"
+
+
+bash script/check_dependencies.sh
+
+
 sh script/createpayload-automaticngrok.sh
 echo "\033[45m   Do you want to upload the payload and prepare the Raspberry Pico now?\033[0m"
 echo "Type 'y' for yes, Enter for exiting"
