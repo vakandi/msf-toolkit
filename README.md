@@ -29,10 +29,10 @@ This is a shell script that sets up a reverse shell using Ngrok.
 3. It saves the archive to `$HOME/msf/tmp/reverse-$RANDOMLETTER.zip`.
 4. It prompts the user to kill any existing Ngrok servers, and starts a new one if needed.
 5. It waits for Ngrok to start and stabilize.
-6. It creates a reverse shell using Metasploit and saves it to `$HOME/msf/dd/payload_sample.dd`.
-7. It encrypts the reverse shell and saves it to `$HOME/msf/dd/payload_sample_e.dd`.
-8. If a previous Ngrok URL was found, it will be saved to `~/msf/tmp/old_link.txt` and the new URL will be saved to `~/msf/tmp/new_link.txt`.
-9. The script displays the Ngrok URL for the reverse shell.
+6. It creates a reverse shell using Metasploit
+7. It encrypts the reverse shell and upload it to `https://transfer.sh`
+9. If a previous Ngrok URL was found, it will be saved to `~/msf/tmp/old_link.txt` and the new URL will be saved to `~/msf/tmp/new_link.txt`.
+10. The script displays the Ngrok URL for the reverse shell.
 
 ## Requirements
 
