@@ -7,7 +7,7 @@ This script is used to generate a reverse shell payload that can be used to gain
 
 1. Clone the repository to your local machine using `git clone https://github.com/your-username/repo-name.git`
 2. Change into the repository directory with `cd repo-name`
-3. Run the script with `./reverse_shell.sh`
+3. Run the script with `./start.sh`
 
 # Ngrok Reverse Shell Script
 
