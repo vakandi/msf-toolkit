@@ -22,6 +22,24 @@ This is a shell script that sets up a reverse shell using Ngrok.
 5. The script will create a reverse shell and save it to `~/msf/tmp/`. 
 6. If a previous Ngrok URL was found, it will be saved to `~/msf/tmp/old_link.txt` and the new URL will be saved to `~/msf/tmp/new_link.txt`.
 
+
+## Features
+
+
+### Automatic Ducky Script and Raspberry Pico preparation with the dd file loaded with the url of the reverse shell payload (encrypted or not)
+
+
+Compatible with **Linux Only**
+
+
+
+### DuckyScript Ready-to-go 
+1. Windows Fully working, desactivate the firewall and create a exception folder in %temp% to store, decompress and run the payload.
+2. Linux needs to update the .dd file in `~/msf/dd/` for linux with the right macro (do a pull request)
+3. MacOS needs to update the .dd file in `~/msf/dd/` for macos with the right macro  (do a pull request)
+4. Android needs to update the .dd file in `~/msf/dd/` for android with the right macro (do a pull request)
+
+
 ## How it works
 
 1. The script reads the Ngrok URL and IP address from a temporary file located at `$HOME/msf/tmp/.temp_ip_ngrok-tcp.txt`.
