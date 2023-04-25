@@ -61,4 +61,4 @@ Compatible with **Linux Only**
 
 
 
-### The feature for ducky script is only ready for Windows 10, not working on Linux Macos IOS or Android
+### (The Ducky script is only ready for Windows 10, not working on Linux Macos IOS or Android)
