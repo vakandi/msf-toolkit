@@ -24,3 +24,4 @@ check_command "whiptail"
 # Check for jq
 check_command "jq"
 
+
